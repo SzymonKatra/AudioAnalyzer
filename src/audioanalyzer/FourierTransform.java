@@ -20,10 +20,11 @@ public class FourierTransform {
         }
 
         fft(input, 0, input.length);
+        //Complex[] output = fft(input);
 
         for (int i = 0; i < samples.length / 2; i++)
         {
-            result[i] = input[i].abs() * 2 / samples.length;
+            result[i] = (input[i].abs() / samples.length) * 2;
         }
     }
 
@@ -50,10 +51,48 @@ public class FourierTransform {
             Complex even = samples[index + i];
             Complex odd = samples[index + halfN + i];
 
-            Complex factor = new Complex(0, (-2.0 * Math.PI * (double) i) / (double) N).exp();
+            double kFact = -2 * i * Math.PI / N;
+
+            Complex factor = new Complex(Math.cos(kFact), Math.sin(kFact));
 
             samples[index + i] = even.add(factor.multiply(odd));
-            samples[index + i + halfN] = even.add(factor.negate().multiply(odd));
+            samples[index + i + halfN] = even.subtract(factor.multiply(odd));
         }
     }
+
+    /*public static Complex[] fft(Complex[] x) {
+        int n = x.length;
+
+        // base case
+        if (n == 1) return new Complex[] { x[0] };
+
+        // radix 2 Cooley-Tukey FFT
+        if (n % 2 != 0) {
+            throw new IllegalArgumentException("n is not a power of 2");
+        }
+
+        // fft of even terms
+        Complex[] even = new Complex[n/2];
+        for (int k = 0; k < n/2; k++) {
+            even[k] = x[2*k];
+        }
+        Complex[] q = fft(even);
+
+        // fft of odd terms
+        Complex[] odd  = even;  // reuse the array
+        for (int k = 0; k < n/2; k++) {
+            odd[k] = x[2*k + 1];
+        }
+        Complex[] r = fft(odd);
+
+        // combine
+        Complex[] y = new Complex[n];
+        for (int k = 0; k < n/2; k++) {
+            double kth = -2 * k * Math.PI / n;
+            Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
+            y[k]       = q[k].add(wk.multiply(r[k]));
+            y[k + n/2] = q[k].subtract(wk.multiply(r[k]));
+        }
+        return y;
+    }*/
 }
