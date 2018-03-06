@@ -2,10 +2,10 @@ package audioanalyzer;
 
 import org.apache.commons.math3.complex.Complex;
 
-public class FourierTransform {
+public class FastFourierTransform implements ISignalAnalyzer {
     private Complex[] m_tmp;
 
-    public void computeHarmonics(double[] samples, double[] result) {
+    public void computeAmplitudes(double[] samples, double[] result) {
         if (m_tmp == null || m_tmp.length != samples.length / 2) {
             m_tmp = new Complex[samples.length / 2];
         }

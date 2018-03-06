@@ -1,20 +1,11 @@
 package audioanalyzer;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -27,11 +18,9 @@ public class Main extends Application {
     public static void main(String[] args) {
         double[] samples = new double[SAMPLESCOUNT];
         try {
-            FileReader reader = new FileReader("C:\\Users\\Szymon\\sample-data-sines.txt");
-            BufferedReader buff = new BufferedReader(reader);
+            DataInputStream stream = new DataInputStream(new FileInputStream("C:\\Users\\Szymon\\Desktop\\aud2.raw"));
             for (int i = 0; i < samples.length; i++) {
-                String line = buff.readLine();
-                samples[i] = Double.parseDouble(line);
+                samples[i] = stream.readDouble();
             }
 
         }
@@ -43,8 +32,8 @@ public class Main extends Application {
         }
         double[] result = new double[samples.length / 2];
         m_fftResult = result;
-        FourierTransform fft = new FourierTransform();
-        fft.computeHarmonics(samples, result);
+        ISignalAnalyzer fft = new FastFourierTransform();
+        fft.computeAmplitudes(samples, result);
 
         /*for (int i = 0; i < result.length; i++) {
             //System.out.println(Integer.toString(i) + " Hz - " + result[i]);
@@ -84,15 +73,21 @@ public class Main extends Application {
 
         gc.setFill(Color.RED);
         double prevX = 0, prevY = 0;
+        double[] xPoints = new double[m_fftResult.length + 1];
+        double[] yPoints = new double[m_fftResult.length + 1];
         for (int i = 0; i < m_fftResult.length; i++)
         {
             double x = (i * (44100.0 / SAMPLESCOUNT)) / 22050 * 800;
-            double y = 600 - (m_fftResult[i] * 600);
-            gc.strokeLine(prevX, prevY, x, y);
-
+            double y = 600 - (m_fftResult[i] / 0.5 * 600);
+            //gc.strokeLine(prevX, prevY, x, y);
+            xPoints[i] = x;
+            yPoints[i] = y;
             prevX = x;
             prevY = y;
         }
+        xPoints[xPoints.length - 1] = 0;
+        yPoints[yPoints.length - 1] = 600;
+        gc.fillPolygon(xPoints, yPoints, m_fftResult.length + 1);
 
         Pane root = new Pane();
         root.getChildren().add(canvas);
