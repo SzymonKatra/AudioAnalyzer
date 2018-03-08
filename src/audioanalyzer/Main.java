@@ -1,11 +1,11 @@
 package audioanalyzer;
 
+import audioanalyzer.logic.FFTAnalyzer;
+import audioanalyzer.logic.ISignalAnalyzer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -32,7 +32,7 @@ public class Main extends Application {
         }
         double[] result = new double[samples.length / 2];
         m_fftResult = result;
-        ISignalAnalyzer fft = new FastFourierTransform();
+        ISignalAnalyzer fft = new FFTAnalyzer();
         fft.computeAmplitudes(samples, result);
 
         /*for (int i = 0; i < result.length; i++) {
@@ -44,31 +44,16 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World!");
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("view/MainScene.fxml"));
 
-        /*NumberAxis xAxis = new NumberAxis(0, 22050,10);
-        NumberAxis yAxis = new NumberAxis(0, 0.1, 0.0001);
-        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(xAxis, yAxis);
+        Scene scene = new Scene(root, 800, 600);
 
-        XYChart.Data data = new XYChart.Data(0,0);
-        Rectangle rect = new Rectangle(0, 0);
-        rect.setVisible(false);
-        data.setNode(rect);
+        stage.setTitle("Audio Analyzer");
+        stage.setScene(scene);
+        stage.show();
 
-        XYChart.Series series = new XYChart.Series();
-        series.setName("fft");
-
-        for (int i = 0; i < m_fftResult.length; i += 10)
-        {
-            series.getData().add(new XYChart.Data(i * (44100.0 / SAMPLESCOUNT), m_fftResult[i]));
-        }
-
-        Scene scene = new Scene(chart, 800, 600);
-        chart.getData().addAll(series);
-        primaryStage.setScene(scene);*/
-
-        Canvas canvas = new Canvas(800, 600);
+        /*Canvas canvas = new Canvas(800, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setFill(Color.RED);
@@ -94,9 +79,9 @@ public class Main extends Application {
         Scene scene = new Scene(root);
 
 
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("FFT");
-        primaryStage.show();
+        stage.setScene(scene);
+        stage.setTitle("FFT");
+        stage.show();*/
 
     }
 }

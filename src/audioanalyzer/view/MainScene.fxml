@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="audioanalyzer.view.MainSceneController"
+            prefHeight="600.0" prefWidth="800.0">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="30"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="50"/>
+    </rowConstraints>
+
+    <Button GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"
+            style="-fx-font-size: 32;" text="Select audio file"
+            onMouseClicked="#selectFileHandler"/>
+
+    <Label fx:id="selectedFileName" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="CENTER"
+            style="-fx-font-size: 24;"/>
+</GridPane>
