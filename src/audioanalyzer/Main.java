@@ -11,35 +11,7 @@ import javafx.stage.Stage;
 import java.io.*;
 
 public class Main extends Application {
-
-    private static double[] m_fftResult;
-    private static final int SAMPLESCOUNT = 512;
-
     public static void main(String[] args) {
-        double[] samples = new double[SAMPLESCOUNT];
-        try {
-            DataInputStream stream = new DataInputStream(new FileInputStream("C:\\Users\\Szymon\\Desktop\\aud2.raw"));
-            for (int i = 0; i < samples.length; i++) {
-                samples[i] = stream.readDouble();
-            }
-
-        }
-        catch (FileNotFoundException e)
-        {
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        double[] result = new double[samples.length / 2];
-        m_fftResult = result;
-        ISignalAnalyzer fft = new FFTAnalyzer();
-        fft.computeAmplitudes(samples, result);
-
-        /*for (int i = 0; i < result.length; i++) {
-            //System.out.println(Integer.toString(i) + " Hz - " + result[i]);
-            System.out.printf("%.20f", result[i]);
-            System.out.println();
-        }*/
         launch(args);
     }
 
