@@ -1,0 +1,10 @@
+#stream-info-label
+{
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+}
+
+#stream-info-data
+{
+    -fx-font-size: 14pt;
+}

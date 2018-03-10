@@ -6,34 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import audioanalyzer.view.StreamInfoDisplay?>
 <?import java.net.URL?>
-<GridPane xmlns="http://javafx.com/javafx"
-          xmlns:fx="http://javafx.com/fxml"
-          fx:controller="audioanalyzer.view.MainSceneController"
-          prefHeight="600.0" prefWidth="800.0">
-    <stylesheets>
-        <URL value="@style.css"/>
-    </stylesheets>
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/javafx">
+    <GridPane>
+        <stylesheets>
+            <URL value="@style.css"/>
+        </stylesheets>
 
-    <columnConstraints>
-        <ColumnConstraints percentWidth="100"/>
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints percentHeight="30"/>
-        <RowConstraints percentHeight="10"/>
-        <RowConstraints percentHeight="10"/>
-        <RowConstraints percentHeight="50"/>
-    </rowConstraints>
-
-    <Button GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"
-            style="-fx-font-size: 32;" text="Select audio file"
-            onMouseClicked="#selectFileHandler"/>
-
-    <Label fx:id="selectedFileName" GridPane.rowIndex="2" GridPane.halignment="CENTER"
-            style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-
-    <GridPane GridPane.rowIndex="3">
         <columnConstraints>
             <ColumnConstraints percentWidth="50"/>
             <ColumnConstraints percentWidth="50"/>
@@ -66,4 +45,4 @@
                 style="-fx-font-size: 16pt;"/>
 
     </GridPane>
-</GridPane>
+</fx:root>

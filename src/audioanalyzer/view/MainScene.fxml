@@ -6,10 +6,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import audioanalyzer.view.StreamInfoDisplay?>
 <GridPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="audioanalyzer.view.MainSceneController"
-            prefHeight="600.0" prefWidth="800.0">
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="audioanalyzer.view.MainSceneController"
+          prefHeight="600.0" prefWidth="800.0">
     <columnConstraints>
         <ColumnConstraints percentWidth="100"/>
     </columnConstraints>
@@ -24,6 +25,9 @@
             style="-fx-font-size: 32;" text="Select audio file"
             onMouseClicked="#selectFileHandler"/>
 
-    <Label fx:id="selectedFileName" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="CENTER"
-            style="-fx-font-size: 24;"/>
+    <Label fx:id="selectedFileName" GridPane.rowIndex="2" GridPane.halignment="CENTER"
+            style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <VBox fx:id="streamBox" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
+    <!--<StreamInfoDisplay GridPane.rowIndex="3" GridPane.halignment="CENTER"/>-->
 </GridPane>

@@ -7,17 +7,17 @@ import java.util.*;
 
 public class FFmpegProbe implements  IAudioFileProbe {
     private class AudioStreamResult {
-        private AudioStream m_audioStream;
+        private AudioStreamInfo m_audioStream;
         private int m_nextIndex;
         private boolean m_isFinished;
 
-        public AudioStreamResult(AudioStream audioStream, int nextIndex, boolean isFinished) {
+        public AudioStreamResult(AudioStreamInfo audioStream, int nextIndex, boolean isFinished) {
             m_audioStream = audioStream;
             m_nextIndex = nextIndex;
             m_isFinished = isFinished;
         }
 
-        public AudioStream getStream() {
+        public AudioStreamInfo getStream() {
             return m_audioStream;
         }
 
@@ -31,12 +31,12 @@ public class FFmpegProbe implements  IAudioFileProbe {
     }
 
     private String m_fileName;
-    private List<AudioStream> m_streams;
+    private List<AudioStreamInfo> m_streams;
 
     public FFmpegProbe(String fileName) throws IOException {
         m_fileName = fileName;
 
-        m_streams = new ArrayList<AudioStream>();
+        m_streams = new ArrayList<AudioStreamInfo>();
 
         String ffProbeResult = runFFmpeg();
         int currentIndex = 0;
@@ -45,7 +45,7 @@ public class FFmpegProbe implements  IAudioFileProbe {
         do {
             result = findStream(ffProbeResult, currentIndex);
             currentIndex = result.getNextIndex();
-            AudioStream s = result.getStream();
+            AudioStreamInfo s = result.getStream();
             if (s != null) m_streams.add(s);
         } while(!result.getIsFinished());
     }
@@ -87,18 +87,24 @@ public class FFmpegProbe implements  IAudioFileProbe {
             return new AudioStreamResult(null, streamEndTagIndex + 9, false);
         }
 
-        AudioStream stream = new AudioStream(Integer.parseInt(properties.getOrDefault("index", "0")),
+        AudioStreamInfo stream = new AudioStreamInfo(Integer.parseInt(properties.getOrDefault("index", "0")),
                                              Integer.parseInt(properties.getOrDefault("channels", "1")),
                                              Integer.parseInt(properties.getOrDefault("sample_rate", "0")),
                                              Integer.parseInt(properties.getOrDefault("bit_rate", "0")),
                                              properties.getOrDefault("codec_long_name", ""),
-                                             properties.getOrDefault("channel_layout", ""));
+                                             properties.getOrDefault("channel_layout", ""),
+                                             Double.parseDouble(properties.getOrDefault("duration", "0")));
 
         return new AudioStreamResult(stream, streamEndTagIndex + 9, false);
     }
 
     @Override
-    public List<AudioStream> getStreams() {
-        return null;
+    public String getFileName() {
+        return m_fileName;
+    }
+
+    @Override
+    public List<AudioStreamInfo> getStreams() {
+        return m_streams;
     }
 }
