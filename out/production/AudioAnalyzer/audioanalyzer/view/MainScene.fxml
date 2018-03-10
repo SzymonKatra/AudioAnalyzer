@@ -7,15 +7,10 @@
 <?import javafx.scene.layout.*?>
 
 <?import audioanalyzer.view.StreamInfoDisplay?>
-<?import java.net.URL?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.MainSceneController"
           prefHeight="600.0" prefWidth="800.0">
-    <stylesheets>
-        <URL value="@style.css"/>
-    </stylesheets>
-
     <columnConstraints>
         <ColumnConstraints percentWidth="100"/>
     </columnConstraints>
@@ -33,37 +28,5 @@
     <Label fx:id="selectedFileName" GridPane.rowIndex="2" GridPane.halignment="CENTER"
             style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
-    <GridPane GridPane.rowIndex="3">
-        <columnConstraints>
-            <ColumnConstraints percentWidth="50"/>
-            <ColumnConstraints percentWidth="50"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="10"/>
-            <RowConstraints percentHeight="40"/>
-        </rowConstraints>
-
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="RIGHT" text="Duration: "/>
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="RIGHT" text="Channels: "/>
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="RIGHT" text="Channel layout: "/>
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.halignment="RIGHT" text="Sample rate (Hz): "/>
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.halignment="RIGHT" text="Bit rate (bps): "/>
-        <Label id="stream-info-label" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.halignment="RIGHT" text="Codec name: "/>
-
-        <Label id="stream-info-data" fx:id="duration" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="LEFT"/>
-        <Label id="stream-info-data" fx:id="channelsCount" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="LEFT"/>
-        <Label id="stream-info-data" fx:id="channelLayout" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="LEFT"/>
-        <Label id="stream-info-data" fx:id="sampleRate" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="LEFT"/>
-        <Label id="stream-info-data" fx:id="bitRate" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="LEFT"/>
-        <Label id="stream-info-data" fx:id="codecName" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="LEFT"/>
-
-        <Button GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6" text="Analyze!" GridPane.halignment="CENTER"
-                style="-fx-font-size: 16pt;"/>
-
-    </GridPane>
+    <VBox fx:id="streamBox" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
 </GridPane>

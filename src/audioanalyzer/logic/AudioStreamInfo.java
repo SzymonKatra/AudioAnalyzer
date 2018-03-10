@@ -1,5 +1,8 @@
 package audioanalyzer.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AudioStreamInfo {
     private int m_streamIndex;
     private int m_channelsCount;
@@ -9,6 +12,8 @@ public class AudioStreamInfo {
     private String m_channelLayout;
     private double m_duration;
 
+    private ArrayList<String> m_rawFilePaths;
+
     public AudioStreamInfo(int streamIndex, int channelsCount, int sampleRate, int bitRate, String codecName, String channelLayout, double duration) {
         m_streamIndex = streamIndex;
         m_channelsCount = channelsCount;
@@ -17,6 +22,8 @@ public class AudioStreamInfo {
         m_codecName = codecName;
         m_channelLayout = channelLayout;
         m_duration = duration;
+
+        m_rawFilePaths = new ArrayList<String>();
     }
 
     public int getStreamIndex() {
@@ -45,5 +52,13 @@ public class AudioStreamInfo {
 
     public double getDuration() {
         return m_duration;
+    }
+
+    public List<String> getRawFilePaths() {
+        return m_rawFilePaths;
+    }
+
+    public void addRawFilePath(String value) {
+        m_rawFilePaths.add(value);
     }
 }

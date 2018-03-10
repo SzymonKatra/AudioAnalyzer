@@ -1,5 +1,5 @@
 package audioanalyzer.logic;
 
 public interface IAudioFileDemuxer {
-    void Demux(int streamIndex, int channelIndex, String outputFileName);
+    void demux(int streamIndex, int channelIndex, String outputFileName);
 }

@@ -41,7 +41,7 @@
         <Label id="stream-info-data" fx:id="bitRate" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="LEFT"/>
         <Label id="stream-info-data" fx:id="codecName" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.halignment="LEFT"/>
 
-        <Button GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6" text="Analyze!" GridPane.halignment="CENTER"
+        <Button fx:id="analyze" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6" text="Analyze!" GridPane.halignment="CENTER"
                 style="-fx-font-size: 16pt;"/>
 
     </GridPane>

@@ -29,5 +29,4 @@
             style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
     <VBox fx:id="streamBox" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
-    <!--<StreamInfoDisplay GridPane.rowIndex="3" GridPane.halignment="CENTER"/>-->
 </GridPane>
