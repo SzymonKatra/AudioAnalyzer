@@ -1,9 +1,12 @@
 package audioanalyzer.view;
 
+import audioanalyzer.Main;
 import audioanalyzer.logic.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -11,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -58,10 +62,22 @@ public class MainSceneController {
 
                         demuxer.demux(0, i, tmpFile.getAbsolutePath());
 
-                        stream.addRawFilePath(file.getAbsolutePath());
+                        stream.addRawFilePath(tmpFile.getAbsolutePath());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+
+                AnalyzerSceneController analyzerController = null;
+                try {
+                    analyzerController = (AnalyzerSceneController) Main.changeView("view/AnalyzerScene.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    analyzerController.setStream(stream);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });

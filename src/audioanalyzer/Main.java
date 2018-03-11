@@ -3,6 +3,7 @@ package audioanalyzer;
 import audioanalyzer.logic.FFTAnalyzer;
 import audioanalyzer.logic.ISignalAnalyzer;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,8 +16,26 @@ public class Main extends Application {
         launch(args);
     }
 
+    private static Stage s_stage;
+    private static Main s_main;
+
+    public static Object changeView(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader(s_main.getClass().getResource(fxml));
+
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root, 800, 600);
+
+        s_stage.setScene(scene);
+
+        return loader.getController();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
+        s_stage = stage;
+        s_main = this;
+
         Parent root = FXMLLoader.load(getClass().getResource("view/MainScene.fxml"));
 
         Scene scene = new Scene(root, 800, 600);

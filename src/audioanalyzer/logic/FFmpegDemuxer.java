@@ -15,7 +15,7 @@ public class FFmpegDemuxer implements IAudioFileDemuxer {
     public void demux(int streamIndex, int channelIndex, String outputFileName) {
         String channel = String.format("0.%d.%d", streamIndex, channelIndex);
         try {
-            Process process = new ProcessBuilder("ffmpeg", "-i", String.format("\"%s\"", m_fileName), "-f", "s32be", "-acodec", "pcm_s32be", "-map_channel", channel, String.format("\"%s\"", outputFileName), "-y").start();
+            Process process = new ProcessBuilder("ffmpeg", "-i", String.format("\"%s\"", m_fileName), "-f", "f64be", "-acodec", "pcm_f64be", "-map_channel", channel, String.format("\"%s\"", outputFileName), "-y").start();
 
             process.waitFor();
         } catch (IOException e) {
