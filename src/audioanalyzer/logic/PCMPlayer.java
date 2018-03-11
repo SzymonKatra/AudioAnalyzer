@@ -2,13 +2,13 @@ package audioanalyzer.logic;
 
 import javax.sound.sampled.*;
 
-public class S32PCMPlayer implements IPCMPlayer {
+public class PCMPlayer implements IPCMPlayer {
     private AudioFormat m_format;
     private DataLine.Info m_info;
     private SourceDataLine m_line;
     private byte[] m_buffer;
 
-    public S32PCMPlayer(int sampleRate)
+    public PCMPlayer(int sampleRate)
     {
         m_buffer = new byte[sampleRate * 2];
 
@@ -21,7 +21,7 @@ public class S32PCMPlayer implements IPCMPlayer {
         }
 
         try {
-            m_line.open(m_format, sampleRate);
+            m_line.open(m_format, sampleRate * 4);
             m_line.start();
         } catch (LineUnavailableException e) {
             e.printStackTrace();

@@ -54,6 +54,10 @@ public class AudioStreamInfo {
         return m_duration;
     }
 
+    public long getTotalSamplesCount() {
+        return (long)Math.round(m_sampleRate * m_duration);
+    }
+
     public List<String> getRawFilePaths() {
         return m_rawFilePaths;
     }
