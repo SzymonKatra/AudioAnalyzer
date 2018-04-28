@@ -63,7 +63,7 @@ public class AnalyzerSceneController {
         m_player = new PCMPlayer(stream.getSampleRate());
         m_analyzer = new FFTAnalyzer();
 
-        m_samplesToAnalyze = 512;//m_stream.getSampleRate();
+        m_samplesToAnalyze = m_stream.getSampleRate();
         m_analyzeWidth = ((double)m_samplesToAnalyze / (double)m_stream.getTotalSamplesCount());
 
         m_currentFile = new RandomAccessFile(m_stream.getRawFilePaths().get(0), "r");
@@ -73,26 +73,18 @@ public class AnalyzerSceneController {
         drawSpectrum();
 
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(30),
+                Duration.millis(200),
                 ae -> {
-                    double beginAll = System.nanoTime();
-                    m_audioPosition+= (0.03 / m_stream.getDuration());
+                    m_audioPosition+= (0.2 / m_stream.getDuration());
                 if (m_audioPosition > 1) m_audioPosition = 1;
-                    /*try {
-                        drawWaveform();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
                     try {
                         drawSpectrum();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    double endAll = System.nanoTime();
-                    System.out.println((endAll - beginAll) / 1000000);
                 }));
         timeline.setCycleCount(Animation.INDEFINITE);
-        //timeline.play();
+        timeline.play();
     }
 
     private void drawWaveform() throws IOException {
@@ -161,19 +153,56 @@ public class AnalyzerSceneController {
 
         double[] result = m_analyzer.getAmplitudes();
 
+        if (result.length > 400)
+        {
+            double[] newResult = new double[400];
+            double perAvg = (double)result.length / (double)newResult.length;
+            for (int i = 0; i < newResult.length; i++)
+            {
+                double central = ((double)i / (double)newResult.length) * result.length;
+                int left = Math.max(0, (int)Math.round(central - perAvg));
+                int right = Math.min(result.length - 1, (int)Math.round(central + perAvg));
+
+                double sum = 0;
+                for (int j = left; j <= right; j++) sum += result[j];
+
+                newResult[i] = sum / (right - left + 1);
+            }
+
+            result = newResult;
+        }
+
         m_gfx.clearRect(0,0, WIDTH,500);
         m_gfx.setFill(Color.RED);
-        double[] xPoints = new double[result.length + 1];
-        double[] yPoints = new double[result.length + 1];
+        double[] xPoints = new double[result.length + 2];
+        double[] yPoints = new double[result.length + 2];
+        double[] decibels = new double[result.length];
+
+        double maximumSample = 0.0;
         for (int i = 0; i < result.length; i++)
         {
-            double x = ((double)i * (m_stream.getSampleRate() / (double)count)) / (double)(m_stream.getSampleRate() / 2) * (double)WIDTH;
-            double y = 500 - (result[i] * 500);
+            if (result[i] > maximumSample) maximumSample = result[i];
+        }
+        double minDecibel = -50.0;
+        for (int i = 0; i < result.length; i++)
+        {
+            decibels[i] = Math.max(-50, 10 * Math.log10(result[i] / maximumSample));
+            //if (decibels[i] < minDecibel) minDecibel = decibels[i];
+        }
+
+        for (int i = 0; i < result.length; i++)
+        {
+            double x = ((double)i / result.length) * (double)WIDTH;
+            //double x = ((double)i * (m_stream.getSampleRate() / (double)result.length)) / (double)(m_stream.getSampleRate() / 2) * (double)WIDTH;
+            double y = (decibels[i] / minDecibel) * 500;
             xPoints[i] = x;
             yPoints[i] = y;
         }
+
+        xPoints[xPoints.length - 2] = WIDTH;
+        yPoints[yPoints.length - 2] = 500;
         xPoints[xPoints.length - 1] = 0;
         yPoints[yPoints.length - 1] = 500;
-        m_gfx.fillPolygon(xPoints, yPoints, result.length + 1);
+        m_gfx.fillPolygon(xPoints, yPoints, result.length + 2);
     }
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class FFmpegProbe implements  IAudioFileProbe {
+public class FFmpegProbe implements IAudioFileProbe {
     private class AudioStreamResult {
         private AudioStreamInfo m_audioStream;
         private int m_nextIndex;

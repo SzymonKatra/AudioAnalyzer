@@ -22,7 +22,7 @@ public class FFTAnalyzer implements ISignalAnalyzer {
 
         Complex[] input = new Complex[samples.length];
         for (int i = 0; i < samples.length; i++) {
-            input[i] = new Complex(samples[i], 0);
+            input[i] = new Complex(hammingWindow(samples[i], i, samples.length) , 0);
         }
 
         fft(input, 0, input.length);
@@ -67,5 +67,10 @@ public class FFTAnalyzer implements ISignalAnalyzer {
             samples[index + i] = even.add(factor.multiply(odd));
             samples[index + i + halfN] = even.subtract(factor.multiply(odd));
         }
+    }
+
+    private double hammingWindow(double sample, int sampleIndex, int sampleCount)
+    {
+        return sample * (0.53836 - 0.46164 * Math.cos((2 * Math.PI * sampleIndex) / (sampleCount - 1)));
     }
 }
