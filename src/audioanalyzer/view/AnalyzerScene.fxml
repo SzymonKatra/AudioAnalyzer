@@ -10,6 +10,6 @@
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.AnalyzerSceneController"
-          prefHeight="600.0" prefWidth="800.0">
-    <Canvas fx:id="canvas" width="800" height="600" onMousePressed="#canvasMouse"/>
+          prefHeight="700.0" prefWidth="1000.0">
+    <Canvas fx:id="canvas" width="1000" height="800" onMousePressed="#canvasMouse" onMouseDragged="#canvasMouse"/>
 </GridPane>

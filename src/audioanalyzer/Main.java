@@ -20,12 +20,15 @@ public class Main extends Application {
     private static Stage s_stage;
     private static Main s_main;
 
+    private static final int WIDTH = 1000;
+    private static final int HEIGHT = 700;
+
     public static Object changeView(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(s_main.getClass().getResource(fxml));
 
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         s_stage.setScene(scene);
 
@@ -39,41 +42,11 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("view/MainScene.fxml"));
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         stage.setTitle("Audio Analyzer");
         stage.setScene(scene);
         stage.show();
-
-        /*Canvas canvas = new Canvas(800, 600);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.setFill(Color.RED);
-        double prevX = 0, prevY = 0;
-        double[] xPoints = new double[m_fftResult.length + 1];
-        double[] yPoints = new double[m_fftResult.length + 1];
-        for (int i = 0; i < m_fftResult.length; i++)
-        {
-            double x = (i * (44100.0 / SAMPLESCOUNT)) / 22050 * 800;
-            double y = 600 - (m_fftResult[i] / 0.5 * 600);
-            //gc.strokeLine(prevX, prevY, x, y);
-            xPoints[i] = x;
-            yPoints[i] = y;
-            prevX = x;
-            prevY = y;
-        }
-        xPoints[xPoints.length - 1] = 0;
-        yPoints[yPoints.length - 1] = 600;
-        gc.fillPolygon(xPoints, yPoints, m_fftResult.length + 1);
-
-        Pane root = new Pane();
-        root.getChildren().add(canvas);
-        Scene scene = new Scene(root);
-
-
-        stage.setScene(scene);
-        stage.setTitle("FFT");
-        stage.show();*/
 
     }
 }

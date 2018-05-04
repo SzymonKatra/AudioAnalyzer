@@ -7,28 +7,26 @@ public class FFTAnalyzer implements ISignalAnalyzer {
     private double[] m_samples;
     private double[] m_amplitudes;
 
-    public void analyze(double[] samples)
-    {
+    public void analyze(double[] samples) {
         m_samples = samples;
 
         if (m_tmp == null || m_tmp.length != samples.length / 2) {
             m_tmp = new Complex[samples.length / 2];
         }
 
-        if (m_amplitudes == null || m_amplitudes.length != m_samples.length / 2)
-        {
+        if (m_amplitudes == null || m_amplitudes.length != m_samples.length / 2) {
             m_amplitudes = new double[m_samples.length / 2];
         }
 
         Complex[] input = new Complex[samples.length];
         for (int i = 0; i < samples.length; i++) {
-            input[i] = new Complex(hammingWindow(samples[i], i, samples.length) , 0);
+            input[i] = new Complex(hammingWindow(samples[i], i, samples.length), 0);
+            //input[i] = new Complex(samples[i], 0);
         }
 
         fft(input, 0, input.length);
 
-        for (int i = 0; i < samples.length / 2; i++)
-        {
+        for (int i = 0; i < samples.length / 2; i++) {
             m_amplitudes[i] = (input[i].abs() / samples.length) * 2;
         }
     }

@@ -10,7 +10,7 @@
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.MainSceneController"
-          prefHeight="600.0" prefWidth="800.0">
+          prefHeight="700.0" prefWidth="1000.0">
     <columnConstraints>
         <ColumnConstraints percentWidth="100"/>
     </columnConstraints>
