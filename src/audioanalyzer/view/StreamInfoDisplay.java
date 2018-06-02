@@ -14,6 +14,9 @@ import audioanalyzer.logic.AudioStreamInfo;
 import java.io.IOException;
 import java.util.Locale;
 
+/**
+ * Component for displaying info about stream
+ */
 public class StreamInfoDisplay extends VBox {
     @FXML
     private Label duration;

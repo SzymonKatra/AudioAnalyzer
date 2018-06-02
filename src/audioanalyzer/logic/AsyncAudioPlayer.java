@@ -3,6 +3,10 @@ package audioanalyzer.logic;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
+/**
+ * Asynchronous audio player.
+ *
+ */
 public class AsyncAudioPlayer {
     private class ReaderThread extends Thread {
         private AsyncAudioPlayer m_parent;
@@ -92,12 +96,19 @@ public class AsyncAudioPlayer {
         m_thread.start();
     }
 
+    /**
+     * Set position of audio to play
+     * @param position
+     */
     public void setPosition(double position) {
         synchronized(this) {
             m_position = position;
         }
     }
 
+    /**
+     * Starts playing audio
+     */
     public void start() {
         synchronized (this) {
             m_running = true;
@@ -107,12 +118,18 @@ public class AsyncAudioPlayer {
         }
     }
 
+    /**
+     * Stops playing audio
+     */
     public void stop() {
         synchronized (this) {
             m_running = false;
         }
     }
 
+    /**
+     * Stops playing audio and terminates thread used for processing
+     */
     public void dispose() {
         stop();
         m_thread.interrupt();

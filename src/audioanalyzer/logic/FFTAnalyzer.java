@@ -2,11 +2,18 @@ package audioanalyzer.logic;
 
 import org.apache.commons.math3.complex.Complex;
 
+/**
+ * Fast Fourier Transform audio analyzer
+ */
 public class FFTAnalyzer implements ISignalAnalyzer {
     private Complex[] m_tmp;
     private double[] m_samples;
     private double[] m_amplitudes;
 
+    /**
+     * Analyze given samples
+     * @param samples
+     */
     public void analyze(double[] samples) {
         m_samples = samples;
 
@@ -32,13 +39,22 @@ public class FFTAnalyzer implements ISignalAnalyzer {
         }
     }
 
+    /**
+     * Returns array with amplitudes of each frequency.
+     * Note: Call analyze(double[] samples) first
+     * @return
+     */
     public double[] getAmplitudes() {
         return m_amplitudes;
     }
 
-    // https://introcs.cs.princeton.edu/java/97data/InplaceFFT.java.html
-    // compute the FFT of x[], assuming its length is a power of 2
-    public static void fastFFT(Complex[] x) {
+    /**
+     * Fast, Non-recursive implementation of FFT
+     * https://introcs.cs.princeton.edu/java/97data/InplaceFFT.java.html
+     * compute the FFT of x[], assuming its length is a power of 2
+     * @param x
+     */
+    private static void fastFFT(Complex[] x) {
 
         // check that length is a power of 2
         int n = x.length;
@@ -71,6 +87,12 @@ public class FFTAnalyzer implements ISignalAnalyzer {
         }
     }
 
+    /**
+     * Recursive implementation of FFT
+     * @param samples
+     * @param index
+     * @param count
+     */
     private void fft(Complex[] samples, int index, int count) {
         if (count <= 1) return;
 
@@ -103,6 +125,13 @@ public class FFTAnalyzer implements ISignalAnalyzer {
         }
     }
 
+    /**
+     * Hamming window function
+     * @param sample
+     * @param sampleIndex
+     * @param sampleCount
+     * @return
+     */
     private double hammingWindow(double sample, int sampleIndex, int sampleCount)
     {
         return sample * (0.53836 - 0.46164 * Math.cos((2 * Math.PI * sampleIndex) / (sampleCount - 1)));

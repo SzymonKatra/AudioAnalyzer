@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * FFmpeg implementation of audio demuxer
+ */
 public class FFmpegDemuxer implements IAudioFileDemuxer {
     private String m_fileName;
 
@@ -11,6 +14,12 @@ public class FFmpegDemuxer implements IAudioFileDemuxer {
         m_fileName = fileName;
     }
 
+    /**
+     * Executes ffmpeg in order to demux given audio
+     * @param streamIndex
+     * @param channelIndex
+     * @param outputFileName
+     */
     @Override
     public void demux(int streamIndex, int channelIndex, String outputFileName) {
         String channel = String.format("0.%d.%d", streamIndex, channelIndex);

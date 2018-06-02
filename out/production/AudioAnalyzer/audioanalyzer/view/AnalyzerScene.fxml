@@ -11,7 +11,7 @@
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.AnalyzerSceneController"
           prefHeight="700.0" prefWidth="1000.0">
-    <Canvas fx:id="canvas" width="1000" height="600" onMousePressed="#canvasMousePressed" onMouseDragged="#canvasMouseDragged" onMouseReleased="#canvasMouseReleased"/>
+    <Canvas fx:id="canvas" width="1000" height="640" onMousePressed="#canvasMousePressed" onMouseDragged="#canvasMouseDragged" onMouseReleased="#canvasMouseReleased"/>
     <Canvas height="10"/>
     <GridPane>
         <columnConstraints>
@@ -34,7 +34,7 @@
         </HBox>
         <HBox GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.halignment="CENTER">
             <Label text="Smoothness: "/>
-            <ScrollBar fx:id="smoothnessScrollBar" min="1" max="16" value="1" onMouseClicked="#smoothnessChanged" onMouseMoved="#smoothnessChanged"/>
+            <ScrollBar fx:id="smoothnessScrollBar" min="1" max="16" value="1" onMouseClicked="#smoothnessChanged"/>
         </HBox>
         <Label fx:id="refreshRateLabel" GridPane.columnIndex="4" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
     </GridPane>

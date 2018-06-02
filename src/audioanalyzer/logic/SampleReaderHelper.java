@@ -4,12 +4,21 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Random;
 
+/**
+ * Helper class for reading samples from file
+ */
 public class SampleReaderHelper {
     private RandomAccessFile m_file;
     private byte[] m_fileContent;
     private byte[] m_buffer;
     private int m_fileLength;
 
+    /**
+     * Constructrs helper
+     * @param file
+     * @param bufferEntireFile true to load entire file into memory, false to enable buffering
+     * @throws IOException
+     */
     public SampleReaderHelper(RandomAccessFile file, boolean bufferEntireFile) throws IOException {
         m_file = file;
         m_fileLength = (int)m_file.length();
@@ -24,6 +33,15 @@ public class SampleReaderHelper {
         }
     }
 
+    /**
+     * Read specified range of samples from the file
+     * This method is thread-safe
+     * @param sampleIndex
+     * @param count
+     * @param result
+     * @param resultIndex
+     * @throws IOException
+     */
     public synchronized void readSamples(int sampleIndex, int count, double[] result, int resultIndex) throws IOException {
         if (m_buffer == null || m_buffer.length < count * 8) m_buffer = new byte[count * 8];
 

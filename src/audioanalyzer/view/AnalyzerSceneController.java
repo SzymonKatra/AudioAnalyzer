@@ -22,6 +22,9 @@ import javafx.util.StringConverter;
 import java.io.*;
 import java.util.Random;
 
+/**
+ * Controller used for analyzer scene
+ */
 public class AnalyzerSceneController {
     private class ComboChannelItem {
         private int m_channelNumber;
@@ -73,6 +76,9 @@ public class AnalyzerSceneController {
     private int m_diffPeak = 0;
     private boolean m_playing = false;
 
+    /**
+     * Initializes controller
+     */
     @FXML
     public void initialize() {
         m_gfx = canvas.getGraphicsContext2D();
@@ -83,6 +89,11 @@ public class AnalyzerSceneController {
         refreshRateLabel.setText("Refresh rate: " + m_refreshRate + " ms");
     }
 
+    /**
+     * Mouse pressed on canvas event handler
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void canvasMousePressed(MouseEvent event) throws IOException {
         if (!event.isPrimaryButtonDown()) return;
@@ -95,6 +106,11 @@ public class AnalyzerSceneController {
         tryChangePosition(event);
     }
 
+    /**
+     * Mouse released on canvas event handler
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void canvasMouseReleased(MouseEvent event) throws IOException {
         if (event.getButton() != MouseButton.PRIMARY) return;
@@ -105,6 +121,11 @@ public class AnalyzerSceneController {
         }
     }
 
+    /**
+     * Mouse dragged on canvas event handler
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void canvasMouseDragged(MouseEvent event) throws IOException {
         if (!event.isPrimaryButtonDown()) return;
@@ -112,6 +133,11 @@ public class AnalyzerSceneController {
         tryChangePosition(event);
     }
 
+    /**
+     * Changes position of audio if mouse is inside bounds of waveform
+     * @param event
+     * @throws IOException
+     */
     private void tryChangePosition(MouseEvent event) throws IOException {
         double y = event.getY();
         if (y > 500 && y < 600) {
@@ -123,6 +149,10 @@ public class AnalyzerSceneController {
         }
     }
 
+    /**
+     * Channel changed event handler
+     * @throws IOException
+     */
     @FXML
     public void channelChanged() throws IOException {
         int channel = ((ComboChannelItem)channelCombo.getValue()).getChannelNumber();
@@ -153,6 +183,9 @@ public class AnalyzerSceneController {
         updateKeyFrame();
     }
 
+    /**
+     * Handler for play/pause button.
+     */
     @FXML
     public void playPause() {
         m_playing = !m_playing;
@@ -169,6 +202,9 @@ public class AnalyzerSceneController {
         }
     }
 
+    /**
+     * Update key frame in the timeline in order to update delay time between frames.
+     */
     private void updateKeyFrame() {
         if (m_playing) {
             m_timeline.stop();
@@ -186,6 +222,10 @@ public class AnalyzerSceneController {
         }
     }
 
+    /**
+     * Refreshes entire view: analyzes and draws spectrum, plots waveform and updates audio player position.
+     * Should be called in loop
+     */
     private void refreshView() {
         m_audioPosition += (((double) m_refreshRate / 1000.0) / m_stream.getDuration());
         if (m_audioPosition > 1) m_audioPosition = 1;
@@ -223,6 +263,10 @@ public class AnalyzerSceneController {
         }
     }
 
+    /**
+     * Analyze width changed event handler
+     * @throws IOException
+     */
     @FXML
     public void analyzeWidthChanged() throws IOException {
         m_samplesToAnalyze = (int)analyzeWidthCombo.getValue();
@@ -231,6 +275,11 @@ public class AnalyzerSceneController {
         drawSpectrum();
     }
 
+    /**
+     * Smoothness changed event handler
+     * @param event
+     * @throws IOException
+     */
     @FXML
     public void smoothnessChanged(MouseEvent event) throws IOException {
         double value = smoothnessScrollBar.getValue();
@@ -238,6 +287,11 @@ public class AnalyzerSceneController {
         drawSpectrum();
     }
 
+    /**
+     * Applies an audio stream to analyze
+     * @param stream Stream to be analyzed
+     * @throws IOException
+     */
     public void setStream(AudioStreamInfo stream) throws IOException {
         ObservableList<ComboChannelItem> list = FXCollections.observableArrayList();
         for (int i = 0; i < stream.getChannelsCount(); i++) {
@@ -273,6 +327,10 @@ public class AnalyzerSceneController {
         analyzeWidthCombo.setValue(16384);
     }
 
+    /**
+     * Draws spectrum of current channel onto canvas
+     * @throws IOException
+     */
     private void drawSpectrum() throws IOException {
         double begin = Math.max(0, m_audioPosition - m_analyzeWidth / 2);
         double end = Math.min(1, m_audioPosition + m_analyzeWidth / 2);

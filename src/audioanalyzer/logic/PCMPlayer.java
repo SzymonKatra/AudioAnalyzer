@@ -2,6 +2,9 @@ package audioanalyzer.logic;
 
 import javax.sound.sampled.*;
 
+/**
+ * Implementation of PCM player
+ */
 public class PCMPlayer implements IPCMPlayer {
     private AudioFormat m_format;
     private DataLine.Info m_info;

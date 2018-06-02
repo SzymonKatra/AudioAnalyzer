@@ -6,6 +6,9 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * Spectrum plotter
+ */
 public class SpectrumPlotter {
     private Rectangle2D m_targetRectangle;
     private Rectangle2D m_graphRectangle;
@@ -43,6 +46,10 @@ public class SpectrumPlotter {
         m_frequencyRange = frequencyRange;
     }
 
+    /**
+     * Plots given amplitudes
+     * @param amplitudes
+     */
     public void plot(double[] amplitudes) {
         m_amplitudes = amplitudes;
         averageResults();
@@ -76,6 +83,9 @@ public class SpectrumPlotter {
         drawGrid();
     }
 
+    /**
+     * Draws description for axes
+     */
     public void drawAxesDescription() {
         double hStep = m_graphRectangle.getWidth() / m_horizontalScales;
         double vStep = m_graphRectangle.getHeight() / m_verticalScales;

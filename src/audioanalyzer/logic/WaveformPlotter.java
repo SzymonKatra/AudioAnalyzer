@@ -7,6 +7,9 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
+/**
+ * Waveform plotter
+ */
 public class WaveformPlotter {
     private class WaveformItem {
         public double m1;
@@ -44,6 +47,9 @@ public class WaveformPlotter {
         rebuildWaveform();
     }
 
+    /**
+     * Reads all samples from the file in order to rebuild waveform
+     */
     public void rebuildWaveform() {
         int sampleDistance = (int) (m_streamInfo.getTotalSamplesCount() / m_waveformRectangle.getWidth());
         double[] buffer = new double[sampleDistance];
@@ -85,6 +91,12 @@ public class WaveformPlotter {
         }
     }
 
+    /**
+     * Plots already computed waveform
+     * @param position
+     * @param analyzeWidth
+     * @throws IOException
+     */
     public void plot(double position, double analyzeWidth) throws IOException {
         m_graphics.clearRect(m_waveformRectangle.getMinX(), m_waveformRectangle.getMinY() - m_triangleHeight, m_waveformRectangle.getWidth(), m_waveformRectangle.getHeight() + m_triangleHeight);
 
@@ -112,8 +124,12 @@ public class WaveformPlotter {
         m_graphics.fillPolygon(m_triangleX, m_triangleY, 3);
     }
 
+    /**
+     * Draws timeline below waveform
+     */
     public void drawTimeline() {
         double y = m_targetRectangle.getMinY() + m_targetRectangle.getHeight();
+        m_graphics.clearRect(m_timelineX, y, m_targetRectangle.getWidth(), m_timelineHeight);
 
         double timeStep = m_streamInfo.getDuration() / m_timelineScales;
         double positionStep = m_targetRectangle.getWidth() / m_timelineScales;

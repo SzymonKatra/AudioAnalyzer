@@ -20,6 +20,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Initial screen to choose file
+ */
 public class MainSceneController {
     @FXML
     private Label selectedFileName;
@@ -29,6 +32,11 @@ public class MainSceneController {
 
     private StreamInfoDisplay streamInfo;
 
+    /**
+     * Select file event handler
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void selectFileHandler(MouseEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
@@ -81,6 +89,7 @@ public class MainSceneController {
                 }
             }
         });
+        streamBox.getChildren().clear();
         streamBox.getChildren().add(streamInfo);
     }
 }

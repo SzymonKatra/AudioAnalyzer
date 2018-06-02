@@ -3,6 +3,9 @@ package audioanalyzer.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Informations about audio stream
+ */
 public class AudioStreamInfo {
     private int m_streamIndex;
     private int m_channelsCount;

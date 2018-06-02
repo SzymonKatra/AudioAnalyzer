@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ * FFmpeg implementation of audio probe.
+ * Used to extract metadata from audio file.
+ */
 public class FFmpegProbe implements IAudioFileProbe {
     private class AudioStreamResult {
         private AudioStreamInfo m_audioStream;
@@ -33,6 +37,11 @@ public class FFmpegProbe implements IAudioFileProbe {
     private String m_fileName;
     private List<AudioStreamInfo> m_streams;
 
+    /**
+     * Reads audio metadata from the specified file
+     * @param fileName
+     * @throws IOException
+     */
     public FFmpegProbe(String fileName) throws IOException {
         m_fileName = fileName;
 
@@ -50,6 +59,11 @@ public class FFmpegProbe implements IAudioFileProbe {
         } while(!result.getIsFinished());
     }
 
+    /**
+     * Execute ffmpeg
+     * @return
+     * @throws IOException
+     */
     private String runFFmpeg() throws IOException {
         Process process = new ProcessBuilder("ffprobe", "-show_streams", m_fileName).start();
         BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -66,6 +80,12 @@ public class FFmpegProbe implements IAudioFileProbe {
         return sb.toString();
     }
 
+    /**
+     * Returns next stream from FFmpeg output
+     * @param ffprobeResult Result from ffprobe
+     * @param start Index where to start search
+     * @return
+     */
     private AudioStreamResult findStream(String ffprobeResult, int start) {
         int streamTagIndex = ffprobeResult.indexOf("[STREAM]", start);
         int streamEndTagIndex = ffprobeResult.indexOf("[/STREAM]", start);
