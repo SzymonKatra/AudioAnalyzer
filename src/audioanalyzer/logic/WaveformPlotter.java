@@ -8,6 +8,13 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 
 public class WaveformPlotter {
+    private class WaveformItem {
+        public double m1;
+        public double m2;
+        public double a1;
+        public double a2;
+    }
+
     private GraphicsContext m_graphics;
     private Rectangle2D m_targetRectangle;
     private Rectangle2D m_waveformRectangle;
@@ -21,6 +28,7 @@ public class WaveformPlotter {
     private int m_timelineX = -14;
     private double[] m_triangleX;
     private double[] m_triangleY;
+    private WaveformItem[] m_waveform;
 
     public WaveformPlotter(GraphicsContext graphics, Rectangle2D targetRectangle, AudioStreamInfo streamInfo, SampleReaderHelper sampleReader) {
         m_graphics = graphics;
@@ -31,16 +39,21 @@ public class WaveformPlotter {
         m_reader = sampleReader;
         m_triangleX = new double[3];
         m_triangleY = new double[3];
+        m_waveform = new WaveformItem[(int)m_waveformRectangle.getWidth()];
+
+        rebuildWaveform();
     }
 
-    public void plot(double position, double analyzeWidth) throws IOException {
-        m_graphics.clearRect(m_waveformRectangle.getMinX(), m_waveformRectangle.getMinY() - m_triangleHeight, m_waveformRectangle.getWidth(), m_waveformRectangle.getHeight() + m_triangleHeight);
-
+    public void rebuildWaveform() {
         int sampleDistance = (int) (m_streamInfo.getTotalSamplesCount() / m_waveformRectangle.getWidth());
         double[] buffer = new double[sampleDistance];
 
         for (int i = 0; i < m_waveformRectangle.getWidth(); i++) {
-            m_reader.readSamples(i * sampleDistance, sampleDistance, buffer, 0);
+            try {
+                m_reader.readSamples(i * sampleDistance, sampleDistance, buffer, 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             double maxPositive = 0;
             double maxNegative = 0;
             double avgPositive = 0;
@@ -61,14 +74,24 @@ public class WaveformPlotter {
 
             double halfHeight = m_waveformRectangle.getHeight() / 2;
 
-            double m1 = halfHeight * (1 - maxPositive);
-            double m2 = halfHeight * (1 - maxNegative);
-            double a1 = halfHeight * (1 - avgPositive);
-            double a2 = halfHeight * (1 - avgNegative);
+            WaveformItem item = new WaveformItem();
 
-            for (int y = (int) m1; y <= (int) m2; y++)
+            item.m1 = halfHeight * (1 - maxPositive);
+            item.m2 = halfHeight * (1 - maxNegative);
+            item.a1 = halfHeight * (1 - avgPositive);
+            item.a2 = halfHeight * (1 - avgNegative);
+
+            m_waveform[i] = item;
+        }
+    }
+
+    public void plot(double position, double analyzeWidth) throws IOException {
+        m_graphics.clearRect(m_waveformRectangle.getMinX(), m_waveformRectangle.getMinY() - m_triangleHeight, m_waveformRectangle.getWidth(), m_waveformRectangle.getHeight() + m_triangleHeight);
+
+        for (int i = 0; i < m_waveform.length; i++) {
+            for (int y = (int) m_waveform[i].m1; y <= (int) m_waveform[i].m2; y++)
                 m_pixelWriter.setColor(i + (int) m_waveformRectangle.getMinX(), y + (int) m_waveformRectangle.getMinY(), Color.BLUE);
-            for (int y = (int) a1; y <= (int) a2; y++)
+            for (int y = (int) m_waveform[i].a1; y <= (int) m_waveform[i].a2; y++)
                 m_pixelWriter.setColor(i + (int) m_waveformRectangle.getMinX(), y + (int) m_waveformRectangle.getMinY(), Color.CORNFLOWERBLUE);
         }
 

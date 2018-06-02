@@ -6,17 +6,38 @@ import java.util.Random;
 
 public class SampleReaderHelper {
     private RandomAccessFile m_file;
+    private byte[] m_fileContent;
     private byte[] m_buffer;
 
-    public SampleReaderHelper(RandomAccessFile file) {
+    public SampleReaderHelper(RandomAccessFile file, boolean bufferEntireFile) {
         m_file = file;
+
+        if (bufferEntireFile) {
+            try {
+                m_fileContent = new byte[(int) m_file.length()];
+                m_file.read(m_fileContent, 0, m_fileContent.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void readSamples(int sampleIndex, int count, double[] result, int resultIndex) throws IOException {
+    public synchronized void readSamples(int sampleIndex, int count, double[] result, int resultIndex) throws IOException {
         if (m_buffer == null || m_buffer.length < count * 8) m_buffer = new byte[count * 8];
 
-        m_file.seek(sampleIndex * 8);
-        m_file.read(m_buffer, 0, count * 8);
+        int samplesCount = m_fileContent.length / 8;
+        if (sampleIndex < 0) sampleIndex = 0;
+        if (sampleIndex + count >= samplesCount) {
+            count = samplesCount - sampleIndex;
+        }
+
+        if (m_fileContent == null) {
+            m_file.seek(sampleIndex * 8);
+            m_file.read(m_buffer, 0, count * 8);
+        }
+        else {
+            System.arraycopy(m_fileContent, sampleIndex * 8, m_buffer, 0, count * 8);
+        }
 
         for (int i = 0; i < count; i++) {
             long x = (Byte.toUnsignedLong(m_buffer[i * 8]) << 56) | (Byte.toUnsignedLong(m_buffer[i * 8 + 1]) << 48) |

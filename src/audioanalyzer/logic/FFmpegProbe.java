@@ -87,15 +87,23 @@ public class FFmpegProbe implements IAudioFileProbe {
             return new AudioStreamResult(null, streamEndTagIndex + 9, false);
         }
 
-        AudioStreamInfo stream = new AudioStreamInfo(Integer.parseInt(properties.getOrDefault("index", "0")),
-                                             Integer.parseInt(properties.getOrDefault("channels", "1")),
-                                             Integer.parseInt(properties.getOrDefault("sample_rate", "0")),
-                                             Integer.parseInt(properties.getOrDefault("bit_rate", "0")),
-                                             properties.getOrDefault("codec_long_name", ""),
-                                             properties.getOrDefault("channel_layout", ""),
-                                             Double.parseDouble(properties.getOrDefault("duration", "0")));
+        AudioStreamInfo stream = new AudioStreamInfo(Integer.parseInt(getPropertyOrDefault(properties, "index", "0")),
+                                             Integer.parseInt(getPropertyOrDefault(properties, "channels", "1")),
+                                             Integer.parseInt(getPropertyOrDefault(properties, "sample_rate", "0")),
+                                             Integer.parseInt(getPropertyOrDefault(properties, "bit_rate", "0")),
+                                             getPropertyOrDefault(properties, "codec_long_name", ""),
+                                             getPropertyOrDefault(properties, "channel_layout", ""),
+                                             Double.parseDouble(getPropertyOrDefault(properties, "duration", "0")));
 
         return new AudioStreamResult(stream, streamEndTagIndex + 9, false);
+    }
+
+    private String getPropertyOrDefault(Map<String, String> properties, String key, String defaultValue) {
+        String result = properties.getOrDefault(key, defaultValue);
+
+        if (result.equals("N/A")) return defaultValue;
+
+        return result;
     }
 
     @Override

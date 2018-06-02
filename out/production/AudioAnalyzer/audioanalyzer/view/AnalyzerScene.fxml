@@ -11,5 +11,5 @@
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.AnalyzerSceneController"
           prefHeight="700.0" prefWidth="1000.0">
-    <Canvas fx:id="canvas" width="1000" height="800" onMousePressed="#canvasMouse" onMouseDragged="#canvasMouse"/>
+    <Canvas fx:id="canvas" width="1000" height="800" onMousePressed="#canvasMousePressed" onMouseDragged="#canvasMouseDragged" onMouseReleased="#canvasMouseReleased"/>
 </GridPane>
