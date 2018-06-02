@@ -27,6 +27,7 @@ public class SpectrumPlotter {
     private int m_decibelY = 5;
     private int m_hertzX = 30;
     private int m_hertzY = -5;
+    private double m_averageFactor = 1;
 
     public SpectrumPlotter(GraphicsContext context, Rectangle2D targetRectangle) {
         m_gfx = context;
@@ -102,8 +103,16 @@ public class SpectrumPlotter {
         }
     }
 
+    public double getAverageFactor() {
+        return m_averageFactor;
+    }
+
+    public void setAverageFactor(double value) {
+        m_averageFactor = value;
+    }
+
     private void averageResults() {
-        int count = (int) m_graphRectangle.getWidth();
+        int count = (int) (m_graphRectangle.getWidth() / m_averageFactor);
 
         if (m_amplitudes.length <= count) {
             m_averageAmplitudes = m_amplitudes;

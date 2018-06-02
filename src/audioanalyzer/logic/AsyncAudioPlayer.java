@@ -31,7 +31,6 @@ public class AsyncAudioPlayer {
                     try {
                         m_parent.m_runSemaphore.acquire();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
 
@@ -112,5 +111,10 @@ public class AsyncAudioPlayer {
         synchronized (this) {
             m_running = false;
         }
+    }
+
+    public void dispose() {
+        stop();
+        m_thread.interrupt();
     }
 }

@@ -24,7 +24,8 @@ public class FFTAnalyzer implements ISignalAnalyzer {
             //input[i] = new Complex(samples[i], 0);
         }
 
-        fft(input, 0, input.length);
+        //fft(input, 0, input.length);
+        fastFFT(input);
 
         for (int i = 0; i < samples.length / 2; i++) {
             m_amplitudes[i] = (input[i].abs() / samples.length) * 2;
@@ -33,6 +34,41 @@ public class FFTAnalyzer implements ISignalAnalyzer {
 
     public double[] getAmplitudes() {
         return m_amplitudes;
+    }
+
+    // https://introcs.cs.princeton.edu/java/97data/InplaceFFT.java.html
+    // compute the FFT of x[], assuming its length is a power of 2
+    public static void fastFFT(Complex[] x) {
+
+        // check that length is a power of 2
+        int n = x.length;
+        if (Integer.highestOneBit(n) != n) {
+            throw new RuntimeException("n is not a power of 2");
+        }
+
+        // bit reversal permutation
+        int shift = 1 + Integer.numberOfLeadingZeros(n);
+        for (int k = 0; k < n; k++) {
+            int j = Integer.reverse(k) >>> shift;
+            if (j > k) {
+                Complex temp = x[j];
+                x[j] = x[k];
+                x[k] = temp;
+            }
+        }
+
+        // butterfly updates
+        for (int L = 2; L <= n; L = L+L) {
+            for (int k = 0; k < L/2; k++) {
+                double kth = -2 * k * Math.PI / L;
+                Complex w = new Complex(Math.cos(kth), Math.sin(kth));
+                for (int j = 0; j < n/L; j++) {
+                    Complex tao = w.multiply(x[j*L + k + L/2]);
+                    x[j*L + k + L/2] = x[j*L + k].subtract(tao);
+                    x[j*L + k]       = x[j*L + k].add(tao);
+                }
+            }
+        }
     }
 
     private void fft(Complex[] samples, int index, int count) {

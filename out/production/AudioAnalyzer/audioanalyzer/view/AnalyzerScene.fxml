@@ -7,9 +7,35 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.canvas.Canvas?>
-<GridPane xmlns="http://javafx.com/javafx"
+<VBox xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="audioanalyzer.view.AnalyzerSceneController"
           prefHeight="700.0" prefWidth="1000.0">
-    <Canvas fx:id="canvas" width="1000" height="800" onMousePressed="#canvasMousePressed" onMouseDragged="#canvasMouseDragged" onMouseReleased="#canvasMouseReleased"/>
-</GridPane>
+    <Canvas fx:id="canvas" width="1000" height="600" onMousePressed="#canvasMousePressed" onMouseDragged="#canvasMouseDragged" onMouseReleased="#canvasMouseReleased"/>
+    <Canvas height="10"/>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints percentHeight="50"/>
+            <RowConstraints percentHeight="50"/>
+        </rowConstraints>
+
+        <Button fx:id="playPauseButton" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER" onAction="#playPause" text="Play"/>
+        <ComboBox fx:id="channelCombo" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="CENTER" onAction="#channelChanged"/>
+        <HBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+            <Label text="Samples: "/>
+            <ComboBox fx:id="analyzeWidthCombo"  onAction="#analyzeWidthChanged"/>
+        </HBox>
+        <HBox GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+            <Label text="Smoothness: "/>
+            <ScrollBar fx:id="smoothnessScrollBar" min="1" max="16" value="1" onMouseClicked="#smoothnessChanged" onMouseMoved="#smoothnessChanged"/>
+        </HBox>
+        <Label fx:id="refreshRateLabel" GridPane.columnIndex="4" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+    </GridPane>
+</VBox>

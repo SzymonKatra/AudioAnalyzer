@@ -47,6 +47,5 @@ public class Main extends Application {
         stage.setTitle("Audio Analyzer");
         stage.setScene(scene);
         stage.show();
-
     }
 }
