@@ -123,7 +123,7 @@ public class MainSceneController {
                                 Duration.millis(300), ae -> {
                             m_progressDots++;
                             if (m_progressDots > 5) m_progressDots = 0;
-                            String val = "Demuxing in progress";
+                            String val = "Demuxing and decoding in progress";
                             for (int i = 0; i < m_progressDots; i++) val += ".";
                             demuxInProgress.setText(val);
                         }));
