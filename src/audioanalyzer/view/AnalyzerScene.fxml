@@ -36,6 +36,5 @@
             <Label text="Smoothness: "/>
             <ScrollBar fx:id="smoothnessScrollBar" min="1" max="16" value="1" onMouseClicked="#smoothnessChanged"/>
         </HBox>
-        <Label fx:id="refreshRateLabel" GridPane.columnIndex="4" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
     </GridPane>
 </VBox>
