@@ -129,7 +129,7 @@ public class WaveformPlotter {
      */
     public void drawTimeline() {
         double y = m_targetRectangle.getMinY() + m_targetRectangle.getHeight();
-        m_graphics.clearRect(m_timelineX, y, m_targetRectangle.getWidth(), m_timelineHeight);
+        m_graphics.clearRect(m_timelineX, m_waveformRectangle.getMinY() + m_waveformRectangle.getHeight(), m_targetRectangle.getWidth() - m_timelineX, m_timelineHeight);
 
         double timeStep = m_streamInfo.getDuration() / m_timelineScales;
         double positionStep = m_targetRectangle.getWidth() / m_timelineScales;

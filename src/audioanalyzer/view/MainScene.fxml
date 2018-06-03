@@ -15,18 +15,25 @@
         <ColumnConstraints percentWidth="100"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints percentHeight="30"/>
         <RowConstraints percentHeight="10"/>
         <RowConstraints percentHeight="10"/>
-        <RowConstraints percentHeight="50"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="40"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
     </rowConstraints>
 
-    <Button GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"
+    <Button fx:id="selectFileButton"
+            GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"
             style="-fx-font-size: 32;" text="Select audio file"
             onMouseClicked="#selectFileHandler"/>
 
-    <Label fx:id="selectedFileName" GridPane.rowIndex="2" GridPane.halignment="CENTER"
+    <Label fx:id="readingMetadataInProgress" GridPane.rowIndex="2" GridPane.halignment="CENTER" style="-fx-font-size: 32;" text="Reading metadata..." visible="false"/>
+    <Label fx:id="selectedFileName" GridPane.rowIndex="3" GridPane.halignment="CENTER"
             style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
-    <VBox fx:id="streamBox" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
+    <VBox fx:id="streamBox" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
+
+    <Label fx:id="demuxInProgress" GridPane.rowIndex="5" GridPane.halignment="CENTER" style="-fx-font-size: 32;" text="Demuxing in progress" visible="false"/>
 </GridPane>

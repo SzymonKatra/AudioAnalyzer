@@ -57,6 +57,10 @@ public class AudioStreamInfo {
         return m_duration;
     }
 
+    public void setDuration(double value) {
+        m_duration = value;
+    }
+
     public long getTotalSamplesCount() {
         return (long)Math.round(m_sampleRate * m_duration);
     }

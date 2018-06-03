@@ -70,6 +70,8 @@ public class StreamInfoDisplay extends VBox {
     private ObjectProperty<EventHandler<MouseEvent>> propertyOnAnalyzeClicked = new SimpleObjectProperty<EventHandler<MouseEvent>>();
 
     public final ObjectProperty<EventHandler<MouseEvent>> onAnalyzeClicked() {
+        analyze.setDisable(true);
+
         return propertyOnAnalyzeClicked;
     }
 

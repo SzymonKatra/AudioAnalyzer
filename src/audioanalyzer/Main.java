@@ -3,19 +3,25 @@ package audioanalyzer;
 import audioanalyzer.logic.FFTAnalyzer;
 import audioanalyzer.logic.ISignalAnalyzer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 
     private static Stage s_stage;
     private static Main s_main;
@@ -40,6 +46,8 @@ public class Main extends Application {
         s_stage = stage;
         s_main = this;
 
+        removeOldFiles();
+
         Parent root = FXMLLoader.load(getClass().getResource("view/MainScene.fxml"));
 
         Scene scene = new Scene(root, WIDTH, HEIGHT);
@@ -47,5 +55,14 @@ public class Main extends Application {
         stage.setTitle("Audio Analyzer");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private static void removeOldFiles() throws IOException {
+        String tmp = System.getProperty("java.io.tmpdir");
+        Files.list(new File(tmp).toPath()).forEach(path -> {
+            if (path.getFileName().toString().startsWith("audioanalyzer")) {
+                new File(path.toString()).delete();
+            }
+        });
     }
 }

@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 
 /**
  * Asynchronous audio player.
- *
  */
 public class AsyncAudioPlayer {
     private class ReaderThread extends Thread {
@@ -24,7 +23,7 @@ public class AsyncAudioPlayer {
         }
 
         public void run() {
-            while (true) {
+            while (m_threadRunning) {
                 boolean running;
                 synchronized (m_parent) {
                     running = m_parent.m_running;
@@ -35,6 +34,7 @@ public class AsyncAudioPlayer {
                     try {
                         m_parent.m_runSemaphore.acquire();
                     } catch (InterruptedException e) {
+                        return;
                     }
                 }
 
@@ -44,7 +44,6 @@ public class AsyncAudioPlayer {
                     double pos;
                     synchronized (m_parent) {
                         pos = m_parent.m_position;
-                        running = m_parent.m_running;
                     }
 
                     long requiredPosition = (long) (pos * m_totalSamples) - m_sampleRate / 2;
@@ -59,6 +58,15 @@ public class AsyncAudioPlayer {
                             m_currentSampleIndex += m_buffer.length;
                             m_player.play(m_buffer, 0, m_buffer.length);
                         }
+                        else
+                        {
+                            int sleepFor = (int)((double)diff / m_sampleRate * 1000);
+                            try {
+                                Thread.sleep(sleepFor);
+                            } catch (InterruptedException e) {
+                                return;
+                            }
+                        }
                     } else {
                         m_player.discard();
                         m_currentSampleIndex = requiredPosition;
@@ -69,6 +77,10 @@ public class AsyncAudioPlayer {
                         }
                         m_currentSampleIndex += m_buffer.length;
                         m_player.play(m_buffer, 0, m_buffer.length);
+                    }
+
+                    synchronized (m_parent) {
+                        running = m_parent.m_running;
                     }
                 }
 
@@ -84,6 +96,8 @@ public class AsyncAudioPlayer {
     private double m_position;
     private boolean m_running;
     private Semaphore m_runSemaphore;
+    private double m_synchroFix = 0.4;
+    private volatile boolean m_threadRunning = true;
 
     public AsyncAudioPlayer(IPCMPlayer player, SampleReaderHelper reader, AudioStreamInfo info) {
         m_player = player;
@@ -93,6 +107,7 @@ public class AsyncAudioPlayer {
         m_runSemaphore = new Semaphore(0,true);
 
         m_thread = new ReaderThread(this);
+        m_thread.setDaemon(true);
         m_thread.start();
     }
 
@@ -102,7 +117,7 @@ public class AsyncAudioPlayer {
      */
     public void setPosition(double position) {
         synchronized(this) {
-            m_position = position;
+            m_position = Math.min(position + (m_synchroFix / m_info.getDuration()), 1);
         }
     }
 
@@ -132,6 +147,19 @@ public class AsyncAudioPlayer {
      */
     public void dispose() {
         stop();
-        m_thread.interrupt();
+        m_runSemaphore.release();
+        m_threadRunning = false;
+    }
+
+    /**
+     *
+     * @param fix Seconds
+     */
+    public void setSynchroFix(double fix) {
+        m_synchroFix = fix;
+    }
+
+    public double getSynchroFix() {
+        return m_synchroFix;
     }
 }

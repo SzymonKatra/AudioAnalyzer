@@ -3,6 +3,9 @@ package audioanalyzer.logic;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -114,6 +117,12 @@ public class FFmpegProbe implements IAudioFileProbe {
                                              getPropertyOrDefault(properties, "codec_long_name", ""),
                                              getPropertyOrDefault(properties, "channel_layout", ""),
                                              Double.parseDouble(getPropertyOrDefault(properties, "duration", "0")));
+
+        if (stream.getDuration() == 0) {
+            String tagDur = getPropertyOrDefault(properties, "TAG:DURATION", "00:00:00.000000000");
+            LocalTime t = LocalTime.parse(tagDur, DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS"));
+            stream.setDuration(t.getHour() * 60 * 60 + t.getMinute() * 60 + t.getSecond() + (double)(t.getNano() / 1000000000));
+        }
 
         return new AudioStreamResult(stream, streamEndTagIndex + 9, false);
     }

@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="AudioAnalyzer">
+    <output-path>$PROJECT_DIR$/out/artifacts/AudioAnalyzer</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="audioanalyzer.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="AudioAnalyzer.jar">
+        <element id="module-output" name="AudioAnalyzer" />
+      </element>
+      <element id="library" level="project" name="commons-math3-3.6.1" />
+    </root>
+  </artifact>
+</component>
