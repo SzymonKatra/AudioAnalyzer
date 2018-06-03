@@ -4,6 +4,7 @@ import audioanalyzer.logic.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -77,7 +78,7 @@ public class AnalyzerSceneController {
     private boolean m_playing = false;
 
     private Thread m_analyzerThread;
-
+    private volatile boolean m_analyzerThreadRunning = true;
     /**
      * Initializes controller
      */
@@ -142,6 +143,8 @@ public class AnalyzerSceneController {
         if (y > 500 && y < 600) {
             double x = event.getX();
             m_audioPosition = x / WIDTH;
+            if (m_audioPosition < 0) m_audioPosition = 0;
+            else if (m_audioPosition > 1) m_audioPosition = 1;
 
             m_waveformPlotter.plot(m_audioPosition, m_analyzeWidth);
             drawSpectrum();
@@ -154,16 +157,16 @@ public class AnalyzerSceneController {
      */
     @FXML
     public void channelChanged() throws IOException {
-        int channel = ((ComboChannelItem)channelCombo.getValue()).getChannelNumber();
+        int channel = ((ComboChannelItem) channelCombo.getValue()).getChannelNumber();
 
-        if (m_currentFile != null) m_currentFile.close();
-        if (m_asyncPlayer != null) m_asyncPlayer.dispose();
-        if (m_timeline != null) m_timeline.stop();
-
-        m_currentFile = new RandomAccessFile(m_stream.getRawFilePaths().get(channel), "r");
         synchronized (m_readerChangeLock) {
+            if (m_currentFile != null) m_currentFile.close();
+            m_currentFile = new RandomAccessFile(m_stream.getRawFilePaths().get(channel), "r");
             m_reader = new SampleReaderHelper(m_currentFile, false);
         }
+
+        if (m_asyncPlayer != null) m_asyncPlayer.dispose();
+        if (m_timeline != null) m_timeline.stop();
         m_waveformPlotter = new WaveformPlotter(m_gfx, new Rectangle2D(0, 520, 1000, 100), m_stream, m_reader);
         m_player = new PCMPlayer(m_stream.getSampleRate());
 
@@ -284,7 +287,7 @@ public class AnalyzerSceneController {
         analyzeWidthCombo.setValue(16384);
 
         m_analyzerThread = new Thread(() -> {
-            while (true) {
+            while (m_analyzerThreadRunning) {
                 double pos, width;
                 int toAnalyze;
                 long totalCount;
@@ -313,10 +316,21 @@ public class AnalyzerSceneController {
                 m_analyzer.analyze(m_samplesBuffer);
 
                 synchronized (m_drawSpectrumLock) {
+                    boolean newBuffer = false;
                     if (m_amplitudesBuffer == null || m_amplitudesBuffer.length != toAnalyze / 2) {
                         m_amplitudesBuffer = new double[toAnalyze / 2];
+                        newBuffer = true;
                     }
                     System.arraycopy(m_analyzer.getAmplitudes(), 0, m_amplitudesBuffer, 0, m_amplitudesBuffer.length);
+                    if (newBuffer) {
+                        Platform.runLater(() -> {
+                            try {
+                                drawSpectrum();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -329,25 +343,6 @@ public class AnalyzerSceneController {
      * @throws IOException
      */
     private void drawSpectrum() throws IOException {
-        /*double begin = Math.max(0, m_audioPosition - m_analyzeWidth / 2);
-
-        int beginSample = (int) Math.round(begin * m_stream.getTotalSamplesCount());
-        if (m_samplesBuffer == null || m_samplesBuffer.length != m_samplesToAnalyze){
-            m_samplesBuffer = new double[m_samplesToAnalyze];
-        }
-        if (m_amplitudesBuffer == null || m_amplitudesBuffer.length != m_samplesToAnalyze / 2) {
-            m_amplitudesBuffer = new double[m_samplesToAnalyze / 2];
-        }
-
-        synchronized (m_readerChangeLock) {
-            m_reader.readSamples(beginSample, m_samplesBuffer.length, m_samplesBuffer, 0);
-        }
-
-        m_analyzer.analyze(m_samplesBuffer);
-
-        synchronized (m_amplitudesBuffer) {
-            System.arraycopy(m_analyzer.getAmplitudes(), 0, m_amplitudesBuffer, 0, m_amplitudesBuffer.length);
-        }*/
         synchronized (m_drawSpectrumLock) {
             if (m_amplitudesBuffer != null) {
                 m_spectrumPlotter.plot(m_amplitudesBuffer);

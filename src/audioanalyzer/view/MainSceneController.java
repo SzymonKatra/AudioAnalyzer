@@ -163,6 +163,7 @@ public class MainSceneController {
                                 AnalyzerSceneController analyzerController = null;
                                 try {
                                     analyzerController = (AnalyzerSceneController) Main.changeView("view/AnalyzerScene.fxml");
+                                    m_executor.shutdown();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
