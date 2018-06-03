@@ -7,8 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="169fcb4f-9c0b-4ee2-a74f-0f9d78281ce3" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerScene.fxml" afterPath="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerScene.fxml" />
-      <change beforePath="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerSceneController.java" afterPath="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerSceneController.java" />
       <change beforePath="$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java" afterPath="$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -123,8 +121,8 @@
       <file leaf-file-name="MainSceneController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="165" column="58" lean-forward="true" selection-start-line="165" selection-start-column="58" selection-end-line="165" selection-end-column="58" />
+            <state relative-caret-position="200">
+              <caret line="100" column="17" lean-forward="false" selection-start-line="100" selection-start-column="17" selection-end-line="100" selection-end-column="17" />
               <folding>
                 <element signature="class#DemuxInfo#0;class#MainSceneController#0" expanded="false" />
                 <element signature="e#1350#1351#0" expanded="true" />
@@ -133,7 +131,7 @@
                 <element signature="e#1478#1479#0" expanded="true" />
                 <element signature="e#1918#1919#0" expanded="true" />
                 <element signature="e#1982#1983#0" expanded="true" />
-                <element signature="e#4284#4295#0" expanded="true" />
+                <element signature="e#4248#4259#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1161,8 +1159,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="165" column="58" lean-forward="true" selection-start-line="165" selection-start-column="58" selection-end-line="165" selection-end-column="58" />
+        <state relative-caret-position="200">
+          <caret line="100" column="17" lean-forward="false" selection-start-line="100" selection-start-column="17" selection-end-line="100" selection-end-column="17" />
           <folding>
             <element signature="class#DemuxInfo#0;class#MainSceneController#0" expanded="false" />
             <element signature="e#1350#1351#0" expanded="true" />
@@ -1171,7 +1169,7 @@
             <element signature="e#1478#1479#0" expanded="true" />
             <element signature="e#1918#1919#0" expanded="true" />
             <element signature="e#1982#1983#0" expanded="true" />
-            <element signature="e#4284#4295#0" expanded="true" />
+            <element signature="e#4248#4259#0" expanded="true" />
           </folding>
         </state>
       </provider>

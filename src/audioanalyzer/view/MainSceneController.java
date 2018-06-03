@@ -99,7 +99,6 @@ public class MainSceneController {
         readingMetadataInProgress.setVisible(true);
         m_executor.submit(() -> {
             try {
-                //Thread.sleep(10);
                 final IAudioFileProbe probe = new FFmpegProbe(file.getAbsolutePath());
                 Platform.runLater(() -> {
                     selectFileButton.setDisable(false);
