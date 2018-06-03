@@ -35,5 +35,5 @@
 
     <VBox fx:id="streamBox" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
 
-    <Label fx:id="demuxInProgress" GridPane.rowIndex="5" GridPane.halignment="CENTER" style="-fx-font-size: 32;" text="Demuxing in progress" visible="false"/>
+    <Label fx:id="demuxInProgress" GridPane.rowIndex="5" GridPane.halignment="CENTER" style="-fx-font-size: 32;" text="Demuxing and decoding in progress" visible="false"/>
 </GridPane>

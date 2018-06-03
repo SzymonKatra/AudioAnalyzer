@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="AudioAnalyzer.jar" size="47677723" download="eager" />
+    <jar href="AudioAnalyzer.jar" size="47677734" download="eager" />
     <jar href="commons-math3-3.6.1.jar" size="2213560" download="eager" />
   </resources>
   <jfx:javafx-desc  width="600" height="400" main-class="audioanalyzer.Main"  name="AudioAnalyzer" />

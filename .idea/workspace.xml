@@ -9,7 +9,7 @@
     <list default="true" id="169fcb4f-9c0b-4ee2-a74f-0f9d78281ce3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/AudioAnalyzer/AudioAnalyzer.jnlp" afterPath="$PROJECT_DIR$/out/artifacts/AudioAnalyzer/AudioAnalyzer.jnlp" />
-      <change beforePath="$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java" afterPath="$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java" />
+      <change beforePath="$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml" afterPath="$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -120,7 +120,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainSceneController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainSceneController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="215">
@@ -152,14 +152,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainScene.fxml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainScene.fxml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml">
           <provider editor-type-id="JavaFX-Scene-Builder">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="38" />
+            <state relative-caret-position="555">
+              <caret line="37" column="140" lean-forward="false" selection-start-line="37" selection-start-column="140" selection-end-line="37" selection-end-column="140" />
               <folding />
             </state>
           </provider>
@@ -260,10 +260,10 @@
         <option value="$PROJECT_DIR$/src/audioanalyzer/logic/FFmpegProbe.java" />
         <option value="$PROJECT_DIR$/src/audioanalyzer/logic/FFmpegDemuxer.java" />
         <option value="$PROJECT_DIR$/src/audioanalyzer/view/StreamInfoDisplay.java" />
-        <option value="$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml" />
         <option value="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerSceneController.java" />
         <option value="$PROJECT_DIR$/src/audioanalyzer/view/AnalyzerScene.fxml" />
         <option value="$PROJECT_DIR$/src/audioanalyzer/view/MainSceneController.java" />
+        <option value="$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml" />
       </list>
     </option>
   </component>
@@ -482,7 +482,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1026,17 +1026,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/audioanalyzer/logic/SpectrumPlotter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-244">
@@ -1173,6 +1162,17 @@
             <element signature="e#1982#1983#0" expanded="true" />
             <element signature="e#4261#4272#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/audioanalyzer/view/MainScene.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="140" lean-forward="false" selection-start-line="37" selection-start-column="140" selection-end-line="37" selection-end-column="140" />
+          <folding />
         </state>
       </provider>
     </entry>
