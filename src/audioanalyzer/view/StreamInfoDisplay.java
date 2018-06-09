@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import audioanalyzer.logic.AudioStreamInfo;
+import audioanalyzer.logic.helpers.AudioStreamInfo;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -33,6 +33,9 @@ public class StreamInfoDisplay extends VBox {
     @FXML
     private Button analyze;
 
+    /**
+     * Constructs empty StreamInfoDisplay component
+     */
     public StreamInfoDisplay() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("StreamInfoDisplay.fxml"));
         fxmlLoader.setRoot(this);
@@ -44,18 +47,15 @@ public class StreamInfoDisplay extends VBox {
             e.printStackTrace();
         }
 
-        analyze.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event){
-                onAnalyzeClicked().get().handle(event);
-            }
-        });
+        analyze.onMouseClickedProperty().set(event -> onAnalyzeClicked().get().handle(event));
     }
 
+    /**
+     * Constructs StreamInfoDisplay component using specified stream information
+     * @param info
+     */
     public StreamInfoDisplay(AudioStreamInfo info) {
         this();
-
-        //streamIndex.setText(Integer.toString(info.getStreamIndex()));
         double dur = info.getDuration();
         int minutes = (int) Math.floor(dur / 60);
         double secs = dur % 60;

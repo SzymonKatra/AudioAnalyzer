@@ -1,4 +1,7 @@
-package audioanalyzer.logic;
+package audioanalyzer.logic.playback;
+
+import audioanalyzer.logic.helpers.AudioStreamInfo;
+import audioanalyzer.logic.helpers.SampleReaderHelper;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
@@ -152,13 +155,17 @@ public class AsyncAudioPlayer {
     }
 
     /**
-     *
+     * Sets synchronization fix, music will be late/hurry for specified amount of seconds.
      * @param fix Seconds
      */
     public void setSynchroFix(double fix) {
         m_synchroFix = fix;
     }
 
+    /**
+     * Gets synchronization fix.
+     * @return
+     */
     public double getSynchroFix() {
         return m_synchroFix;
     }

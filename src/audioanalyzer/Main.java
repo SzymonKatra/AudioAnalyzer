@@ -1,21 +1,13 @@
 package audioanalyzer;
 
-import audioanalyzer.logic.FFTAnalyzer;
-import audioanalyzer.logic.ISignalAnalyzer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
     public static void main(String[] args) {

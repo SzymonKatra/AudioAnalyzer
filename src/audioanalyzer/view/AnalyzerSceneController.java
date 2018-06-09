@@ -1,27 +1,37 @@
 package audioanalyzer.view;
 
-import audioanalyzer.logic.*;
+import audioanalyzer.logic.analyzers.FFTAnalyzer;
+import audioanalyzer.logic.analyzers.ISignalAnalyzer;
+import audioanalyzer.logic.helpers.AudioStreamInfo;
+import audioanalyzer.logic.helpers.SampleReaderHelper;
+import audioanalyzer.logic.playback.AsyncAudioPlayer;
+import audioanalyzer.logic.playback.IPCMPlayer;
+import audioanalyzer.logic.playback.PCMPlayer;
+import audioanalyzer.logic.plotters.ISpectrumPlotter;
+import audioanalyzer.logic.plotters.IWaveformPlotter;
+import audioanalyzer.logic.plotters.SpectrumPlotter;
+import audioanalyzer.logic.plotters.WaveformPlotter;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
-import javafx.scene.image.PixelWriter;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
-import java.io.*;
-import java.util.Random;
+import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Controller used for analyzer scene
@@ -41,7 +51,7 @@ public class AnalyzerSceneController {
         }
     }
 
-    private final int WIDTH = 1000;
+    private final double UPDATE_DELTA = 0.03;
 
     @FXML
     private Canvas canvas;
@@ -59,8 +69,8 @@ public class AnalyzerSceneController {
     private ISignalAnalyzer m_analyzer;
     private RandomAccessFile m_currentFile;
     private SampleReaderHelper m_reader;
-    private SpectrumPlotter m_spectrumPlotter;
-    private WaveformPlotter m_waveformPlotter;
+    private ISpectrumPlotter m_spectrumPlotter;
+    private IWaveformPlotter m_waveformPlotter;
     private AsyncAudioPlayer m_asyncPlayer;
 
     private GraphicsContext m_gfx;
@@ -76,9 +86,11 @@ public class AnalyzerSceneController {
     private int m_samplesToAnalyze;
     private double m_analyzeWidth;
     private boolean m_playing = false;
+    private boolean m_dragging = false;
 
     private Thread m_analyzerThread;
     private volatile boolean m_analyzerThreadRunning = true;
+
     /**
      * Initializes controller
      */
@@ -96,14 +108,19 @@ public class AnalyzerSceneController {
      */
     @FXML
     private void canvasMousePressed(MouseEvent event) throws IOException {
-        if (!event.isPrimaryButtonDown()) return;
+        if (event.getButton() != MouseButton.PRIMARY) return;
 
-        if (m_playing) {
-            m_timeline.stop();
-            m_asyncPlayer.stop();
+        double y = event.getY();
+        if (y > m_waveformPlotter.getY() && y < m_waveformPlotter.getY() + m_waveformPlotter.getHeight()) {
+            m_dragging = true;
+
+            if (m_playing) {
+                m_timeline.stop();
+                m_asyncPlayer.stop();
+            }
+
+            changePosition(event);
         }
-
-        tryChangePosition(event);
     }
 
     /**
@@ -119,6 +136,8 @@ public class AnalyzerSceneController {
             m_timeline.play();
             m_asyncPlayer.start();
         }
+
+        m_dragging = false;
     }
 
     /**
@@ -130,7 +149,9 @@ public class AnalyzerSceneController {
     private void canvasMouseDragged(MouseEvent event) throws IOException {
         if (!event.isPrimaryButtonDown()) return;
 
-        tryChangePosition(event);
+        if (m_dragging) {
+            changePosition(event);
+        }
     }
 
     /**
@@ -138,17 +159,14 @@ public class AnalyzerSceneController {
      * @param event
      * @throws IOException
      */
-    private void tryChangePosition(MouseEvent event) throws IOException {
-        double y = event.getY();
-        if (y > 500 && y < 600) {
-            double x = event.getX();
-            m_audioPosition = x / WIDTH;
-            if (m_audioPosition < 0) m_audioPosition = 0;
-            else if (m_audioPosition > 1) m_audioPosition = 1;
+    private void changePosition(MouseEvent event) throws IOException {
+        double x = event.getX();
+        m_audioPosition = x / m_waveformPlotter.getWidth();
+        if (m_audioPosition < 0) m_audioPosition = 0;
+        else if (m_audioPosition > 1) m_audioPosition = 1;
 
-            m_waveformPlotter.plot(m_audioPosition, m_analyzeWidth);
-            drawSpectrum();
-        }
+        m_waveformPlotter.plot(m_audioPosition, m_analyzeWidth);
+        drawSpectrum();
     }
 
     /**
@@ -156,7 +174,7 @@ public class AnalyzerSceneController {
      * @throws IOException
      */
     @FXML
-    public void channelChanged() throws IOException {
+    public void channelChanged() throws IOException, LineUnavailableException {
         int channel = ((ComboChannelItem) channelCombo.getValue()).getChannelNumber();
 
         synchronized (m_readerChangeLock) {
@@ -181,22 +199,23 @@ public class AnalyzerSceneController {
 
         m_waveformPlotter.drawTimeline();
 
-        m_timeline = new Timeline(new KeyFrame(
-                Duration.millis(30), ae -> {
-            synchronized (m_variablesLock) {
-                m_audioPosition += (0.03 / m_stream.getDuration());
-                if (m_audioPosition > 1) m_audioPosition = 1;
-            }
-            try {
-                drawSpectrum();
-                m_waveformPlotter.plot(m_audioPosition, m_analyzeWidth);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            m_asyncPlayer.setPosition(m_audioPosition);
-        }));
+        m_timeline = new Timeline(new KeyFrame(Duration.seconds(UPDATE_DELTA), ae -> updatePosition()));
         m_timeline.setCycleCount(Animation.INDEFINITE);
         if (m_playing) m_timeline.play();
+    }
+
+    private void updatePosition() {
+        synchronized (m_variablesLock) {
+            m_audioPosition += (UPDATE_DELTA / m_stream.getDuration());
+            if (m_audioPosition > 1) m_audioPosition = 1;
+        }
+        try {
+            drawSpectrum();
+            m_waveformPlotter.plot(m_audioPosition, m_analyzeWidth);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        m_asyncPlayer.setPosition(m_audioPosition);
     }
 
     /**
@@ -249,7 +268,7 @@ public class AnalyzerSceneController {
      * @param stream Stream to be analyzed
      * @throws IOException
      */
-    public void setStream(AudioStreamInfo stream) throws IOException {
+    public void setStream(AudioStreamInfo stream) throws IOException, LineUnavailableException {
         ObservableList<ComboChannelItem> list = FXCollections.observableArrayList();
         for (int i = 0; i < stream.getChannelsCount(); i++) {
             list.add(new ComboChannelItem(i));
@@ -267,14 +286,13 @@ public class AnalyzerSceneController {
             }
         });
 
-        analyzeWidthCombo.getItems().addAll(2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144);
+        analyzeWidthCombo.getItems().addAll(4096, 8192, 16384, 32768, 65536, 131072);
 
         synchronized (m_variablesLock) {
             m_stream = stream;
             m_player = new PCMPlayer(stream.getSampleRate());
             m_analyzer = new FFTAnalyzer();
 
-            m_samplesToAnalyze = 32768;//m_stream.getSampleRate();
             m_analyzeWidth = ((double) m_samplesToAnalyze / (double) m_stream.getTotalSamplesCount());
 
             m_audioPosition = 0;
