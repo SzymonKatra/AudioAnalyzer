@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_audioanalyzer" default="compile.module.audioanalyzer">
+  <dirname property="module.audioanalyzer.basedir" file="${ant.file.module_audioanalyzer}"/>
+  
+  <property name="module.jdk.home.audioanalyzer" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.audioanalyzer" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.audioanalyzer" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.audioanalyzer" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="audioanalyzer.output.dir" value="${module.audioanalyzer.basedir}/out/production/AudioAnalyzer"/>
+  <property name="audioanalyzer.testoutput.dir" value="${module.audioanalyzer.basedir}/out/test/AudioAnalyzer"/>
+  
+  <path id="audioanalyzer.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="audioanalyzer.module.production.classpath">
+    <path refid="${module.jdk.classpath.audioanalyzer}"/>
+    <path refid="library.commons-math3-3.6.1.classpath"/>
+  </path>
+  
+  <path id="audioanalyzer.runtime.production.module.classpath">
+    <pathelement location="${audioanalyzer.output.dir}"/>
+    <path refid="library.commons-math3-3.6.1.classpath"/>
+  </path>
+  
+  <path id="audioanalyzer.module.classpath">
+    <path refid="${module.jdk.classpath.audioanalyzer}"/>
+    <pathelement location="${audioanalyzer.output.dir}"/>
+    <path refid="library.commons-math3-3.6.1.classpath"/>
+  </path>
+  
+  <path id="audioanalyzer.runtime.module.classpath">
+    <pathelement location="${audioanalyzer.testoutput.dir}"/>
+    <pathelement location="${audioanalyzer.output.dir}"/>
+    <path refid="library.commons-math3-3.6.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.audioanalyzer">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.audioanalyzer">
+    <patternset refid="excluded.from.module.audioanalyzer"/>
+  </patternset>
+  
+  <path id="audioanalyzer.module.sourcepath">
+    <dirset dir="${module.audioanalyzer.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.audioanalyzer" depends="compile.module.audioanalyzer.production,compile.module.audioanalyzer.tests" description="Compile module AudioAnalyzer"/>
+  
+  <target name="compile.module.audioanalyzer.production" depends="register.custom.compilers" description="Compile module AudioAnalyzer; production classes">
+    <mkdir dir="${audioanalyzer.output.dir}"/>
+    <javac2 destdir="${audioanalyzer.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.audioanalyzer}/javac">
+      <compilerarg line="${compiler.args.audioanalyzer}"/>
+      <bootclasspath refid="audioanalyzer.module.bootclasspath"/>
+      <classpath refid="audioanalyzer.module.production.classpath"/>
+      <src refid="audioanalyzer.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.audioanalyzer"/>
+    </javac2>
+    
+    <copy todir="${audioanalyzer.output.dir}">
+      <fileset dir="${module.audioanalyzer.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.audioanalyzer.tests" depends="register.custom.compilers,compile.module.audioanalyzer.production" description="compile module AudioAnalyzer; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.audioanalyzer" description="cleanup module">
+    <delete dir="${audioanalyzer.output.dir}"/>
+    <delete dir="${audioanalyzer.testoutput.dir}"/>
+  </target>
+</project>

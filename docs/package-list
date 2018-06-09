@@ -1,0 +1,7 @@
+audioanalyzer
+audioanalyzer.logic.analyzers
+audioanalyzer.logic.helpers
+audioanalyzer.logic.playback
+audioanalyzer.logic.plotters
+audioanalyzer.logic.preprocessors
+audioanalyzer.view
